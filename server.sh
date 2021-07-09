@@ -16,34 +16,26 @@ do
         then
             echo $currentSelection > "$WORKING_DIR/currentCopy.txt"
         fi
-        fileFound=0
-        numberOfFiles=1
+        fileFound=$((-1))
+        numberOfFiles=0
         for file in $files
         do
-            if [ "$file" != "$WORKING_DIR/currentCopy.txt" ];
+            if [ "$file" != "$WORKING_DIR/currentCopy.txt" ] && [ "$file" != "$WORKING_DIR/currentIdx.txt" ];
             then
-                numberOfFiles=$(($numberOfFiles + 1))
-                echo $file
-                echo $numberOfFiles
-                difference=$(diff -s currentCopy.txt $file | grep "\-\-\-")
+                difference=$(diff -s currentCopy.txt clip$numberOfFiles.txt | grep "\-\-\-")
                 if [ "$difference" != "---" ];
                 then
-                    fileFound=1
+                    fileFound=$(($numberOfFiles))
                 fi
+                numberOfFiles=$(($numberOfFiles + 1))
             fi
         done
-        echo $numberOfFiles
-        if [[ $fileFound -eq 0 ]]
+        if [[ $fileFound -eq -1 ]]
         then
-            echo "new copy"
             echo $currentSelection > "$WORKING_DIR/clip$numberOfFiles.txt"
+            fileFound=$(($numberOfFiles))
         fi
-        # if [ "$existingFile" == "" ];
-        # then
-        #     numClips=$(ls | grep -ce "clip[0-9]*.txt")
-        #     echo $numClips
-        #     echo $currentSelection >> "clip$numClips.txt"
-        # fi
+        echo $fileFound > "$WORKING_DIR/currentIdx.txt"
     fi
     prevSelection=$currentSelection    
 done

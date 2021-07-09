@@ -1,1 +1,1 @@
-WORKING_DIR="/home/imdaredevil/.copy-cat-tail"
+WORKING_DIR="/home/imdaredevil/.copy-cat-tail/clipboard"

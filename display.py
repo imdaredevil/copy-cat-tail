@@ -5,6 +5,7 @@ import glob
 import os
 gi.require_version("Gtk", "3.0")
 from gi.repository import Gtk, Gdk
+import subprocess
 
 CONFIG = {}
 
@@ -82,6 +83,7 @@ class HeaderBarWindow(Gtk.Window):
         shift = (event.state & Gdk.ModifierType.SHIFT_MASK)
         if shift and event.keyval == Gdk.KEY_Shift_R:
             self.destroy()
+            subprocess.run("echo -n \"{0}\" | xclip -i -selection clipboard".format(self.label.get_text()), shell=True)
             Gtk.main_quit()
     
     def change_clip(self, widget, event):

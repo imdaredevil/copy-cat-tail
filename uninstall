@@ -1,0 +1,4 @@
+#!/bin/bash
+
+rm -rf $HOME/.copy-cat-tail
+sudo rm -rf /usr/bin/copy-cat-tail-*

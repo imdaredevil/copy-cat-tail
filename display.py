@@ -6,17 +6,16 @@ gi.require_version("Gtk", "3.0")
 from gi.repository import Gtk, Gdk
 import subprocess
 
-CONFIG_DIR = '/home/imdaredevil/.copy-cat-tail'
+CONFIG_DIR = '/home/imdaredevil/.copy-cat-tail/config'
 CONFIG = {}
 
 def get_config():
-    config = open('{0}/config.sh'.format(CONFIG_DIR), 'r')
+    config = open('{0}/config'.format(CONFIG_DIR), 'r')
     configList = [row.split('=') for row in config.readlines()]
-    configDict = {row[0]: row[1][1:-2] for row in configList}
+    configDict = {row[0]: row[1][1:-1] for row in configList}
     return configDict
 
 def get_file_data():
-    print(CONFIG['WORKING_DIR'])
     numFiles = len(glob.glob('{0}/copies/clip*.txt'.format(CONFIG['WORKING_DIR'])))
     currentIdxFile = open('{0}/currentIdx.txt'.format(CONFIG['WORKING_DIR']), 'r')
     currentIdx = int(currentIdxFile.read())

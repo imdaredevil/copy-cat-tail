@@ -1,7 +1,7 @@
 #!/bin/bash
 
-. config.sh
-mkdir -p $WORKING_DIR/copies
+CONFIG_DIR="/home/imdaredevil/.copy-cat-tail/config"
+. "$CONFIG_DIR/config"
 cd $WORKING_DIR
 prevSelection='5'
 currentSelection='5'
@@ -27,7 +27,6 @@ do
                 fi
                 numberOfFiles=$(($numberOfFiles + 1))
         done
-        echo $fileFound
         if [[ $fileFound -eq -1 ]]
         then
             currentWriteIdxFile=$(ls | grep "currentWriteIdx.txt")

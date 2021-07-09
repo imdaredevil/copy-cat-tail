@@ -17,11 +17,14 @@ def get_config():
 
 def num_files():
     print(CONFIG['WORKING_DIR'])
-    return len(glob.glob('{0}/clip*.txt'.format(CONFIG['WORKING_DIR'])))
+    numFiles = len(glob.glob('{0}/copies/clip*.txt'.format(CONFIG['WORKING_DIR'])))
+    currentIdxFile = open('{0}/currentIdx.txt'.format(CONFIG['WORKING_DIR']), 'r')
+    currentIdx = int(currentIdxFile.read())
+    return numFiles,currentIdx
 
 
 class HeaderBarWindow(Gtk.Window):
-    def __init__(self, numFiles):
+    def __init__(self, numFiles, currentIdx):
         super().__init__(title="HeaderBar Demo")
         # setting window properties
         self.set_default_size(500, 400)
@@ -31,7 +34,7 @@ class HeaderBarWindow(Gtk.Window):
 
         # setting the files and contents
         self.numFiles = numFiles
-        self.currentIdx = numFiles - 1
+        self.currentIdx = currentIdx
 
         # composing the header
         hb = Gtk.HeaderBar()
@@ -110,8 +113,8 @@ class HeaderBarWindow(Gtk.Window):
         self.numLabel.set_text('{0} / {1}'.format(self.numFiles - self.currentIdx, self.numFiles))
     
 CONFIG = get_config()
-NUM_FILES = num_files()
-win = HeaderBarWindow(NUM_FILES)
+numFiles, currentIdx = get_file_data() 
+win = HeaderBarWindow(numFiles, currentIdx)
 win.connect("destroy", Gtk.main_quit)
 win.show_all()
 Gtk.main()

@@ -1,54 +1,81 @@
 import gi
-
+import glob
+import os
 gi.require_version("Gtk", "3.0")
 from gi.repository import Gtk, Gdk
 
+CONFIG = {}
+
+def get_config():
+    config = open('config.sh', 'r')
+    configList = [row.split('=') for row in config.readlines()]
+    configDict = {row[0]: row[1][1:-1] for row in configList}
+    return configDict
+
+def num_files():
+    print(CONFIG['WORKING_DIR'])
+    return len(glob.glob('{0}/clip*.txt'.format(CONFIG['WORKING_DIR'])))
+
 
 class HeaderBarWindow(Gtk.Window):
-    def __init__(self):
+    def __init__(self, numFiles):
         super().__init__(title="HeaderBar Demo")
-        self.set_default_size(600, 500)
+        # setting window properties
+        self.set_default_size(500, 400)
         self.set_border_width(0)
         self.set_position(Gtk.WindowPosition.CENTER)
         self.set_opacity(0.8)
+
+        # setting the files and contents
+        self.numFiles = numFiles
+        self.currentIdx = numFiles - 1
+
+        # composing the header
         hb = Gtk.HeaderBar()
         hb.set_show_close_button(True)
         hb.props.title = "Copy Cat\'s Tail"
         self.set_titlebar(hb)
-        # the scrolledwindow
-        scrolled_window = Gtk.ScrolledWindow()
-        scrolled_window.set_border_width(2)      
-        # there is always the scrollbar (otherwise: AUTOMATIC - only if needed
-        # - or NEVER)
-        scrolled_window.set_policy(
-            Gtk.PolicyType.ALWAYS, Gtk.PolicyType.ALWAYS)
+
+        # adding child components to header
         box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL)
         Gtk.StyleContext.add_class(box.get_style_context(), "linked")
-
         button = Gtk.Button()
         button.add(
             Gtk.Arrow(arrow_type=Gtk.ArrowType.LEFT, shadow_type=Gtk.ShadowType.NONE)
         )
+        button.connect('clicked', self.move_next)
         box.add(button)
+        self.numLabel = Gtk.Label()
+        box.add(self.numLabel)
         button = Gtk.Button()
         button.add(
             Gtk.Arrow(arrow_type=Gtk.ArrowType.RIGHT, shadow_type=Gtk.ShadowType.NONE)
         )
+        button.connect('clicked', self.move_prev)
         box.add(button)
-
         hb.pack_start(box)
-        self.label = Gtk.Label(label='Temporary one ' * 1000)
+
+        # setting scroll window
+        scrolled_window = Gtk.ScrolledWindow()
+        scrolled_window.set_border_width(2)      
+        scrolled_window.set_policy(
+            Gtk.PolicyType.ALWAYS, Gtk.PolicyType.ALWAYS)
+        
+        # adding label to scroll window
+        self.label = Gtk.Label()
         self.label.set_line_wrap(True)
         self.label.set_max_width_chars(150)
         scrolled_window.add_with_viewport(self.label)
-        self.add(scrolled_window)
         self.connect("key-release-event",self.exit_window)
         self.connect("key-press-event", self.change_clip)
 
+        # adding scroll window to window
+        self.add(scrolled_window)
+
+        # setting values
+        self.set_display_text()
+
     def exit_window(self, widget, event):
-        print("Key press on widget: ", widget)
-        print("          Modifiers: ", event.state)
-        print("      Key val, name: ", event.keyval, Gdk.keyval_name(event.keyval))
         ctrl = (event.state & Gdk.ModifierType.CONTROL_MASK)
         shift = (event.state & Gdk.ModifierType.SHIFT_MASK)
         if shift and event.keyval == Gdk.KEY_Shift_R:
@@ -56,16 +83,32 @@ class HeaderBarWindow(Gtk.Window):
             Gtk.main_quit()
     
     def change_clip(self, widget, event):
-        print("Key press on widget: ", widget)
-        print("          Modifiers: ", event.state)
-        print("      Key val, name: ", event.keyval, Gdk.keyval_name(event.keyval))
         shift = (event.state & Gdk.ModifierType.SHIFT_MASK)
         if shift and event.keyval == Gdk.KEY_Right:
-            print("right")
+            self.move_prev(widget)
         if shift and event.keyval == Gdk.KEY_Left:
-            print("left")
+            self.move_next(widget)
 
-win = HeaderBarWindow()
+
+    def move_next(self, widget):
+        if self.currentIdx < self.numFiles - 1:
+                self.currentIdx += 1
+        self.set_display_text()
+    
+    def move_prev(self, widget):
+        if self.currentIdx > 0:
+                self.currentIdx -= 1
+        self.set_display_text()
+    
+    def set_display_text(self):
+        global CONFIG
+        currentFile = open('{0}/clip{1}.txt'.format(CONFIG['WORKING_DIR'], self.currentIdx))
+        self.label.set_text(currentFile.read())
+        self.numLabel.set_text('{0} / {1}'.format(self.numFiles - self.currentIdx, self.numFiles))
+    
+CONFIG = get_config()
+NUM_FILES = num_files()
+win = HeaderBarWindow(NUM_FILES)
 win.connect("destroy", Gtk.main_quit)
 win.show_all()
 Gtk.main()

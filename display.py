@@ -7,12 +7,13 @@ gi.require_version("Gtk", "3.0")
 from gi.repository import Gtk, Gdk
 import subprocess
 
+CONFIG_DIR = '/home/imdaredevil/.copy-cat-tail'
 CONFIG = {}
 
 def get_config():
-    config = open('config.sh', 'r')
+    config = open('{0}/config.sh'.format(CONFIG_DIR), 'r')
     configList = [row.split('=') for row in config.readlines()]
-    configDict = {row[0]: row[1][1:-1] for row in configList}
+    configDict = {row[0]: row[1][1:-2] for row in configList}
     return configDict
 
 def num_files():
@@ -108,7 +109,7 @@ class HeaderBarWindow(Gtk.Window):
     
     def set_display_text(self):
         global CONFIG
-        currentFile = open('{0}/clip{1}.txt'.format(CONFIG['WORKING_DIR'], self.currentIdx))
+        currentFile = open('{0}/copies/clip{1}.txt'.format(CONFIG['WORKING_DIR'], self.currentIdx))
         self.label.set_text(currentFile.read())
         self.numLabel.set_text('{0} / {1}'.format(self.numFiles - self.currentIdx, self.numFiles))
     

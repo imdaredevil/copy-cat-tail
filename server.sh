@@ -1,7 +1,7 @@
 #!/bin/bash
 
 . config.sh
-mkdir -p $WORKING_DIR
+mkdir -p $WORKING_DIR/copies
 cd $WORKING_DIR
 prevSelection='5'
 currentSelection='5'
@@ -11,31 +11,37 @@ do
     currentSelection=$(xclip -o -selection clipboard)
     if [ "$currentSelection" != "$prevSelection" ]
     then
-        files=$(find $WORKING_DIR -maxdepth 1 -type f)
+        files=$(find $WORKING_DIR/copies -maxdepth 1 -type f)
         if [ "$files" != "" ];
         then
-            echo $currentSelection > "$WORKING_DIR/currentCopy.txt"
+            echo -n $currentSelection > "$WORKING_DIR/currentCopy.txt"
         fi
         fileFound=$((-1))
         numberOfFiles=0
         for file in $files
         do
-            if [ "$file" != "$WORKING_DIR/currentCopy.txt" ] && [ "$file" != "$WORKING_DIR/currentIdx.txt" ];
-            then
-                difference=$(diff -s currentCopy.txt clip$numberOfFiles.txt | grep "\-\-\-")
+                difference=$(diff -s currentCopy.txt copies/clip$numberOfFiles.txt | grep "\-\-\-")
                 if [ "$difference" != "---" ];
                 then
                     fileFound=$(($numberOfFiles))
                 fi
                 numberOfFiles=$(($numberOfFiles + 1))
-            fi
         done
+        echo $fileFound
         if [[ $fileFound -eq -1 ]]
         then
-            echo $currentSelection > "$WORKING_DIR/clip$numberOfFiles.txt"
+            currentWriteIdxFile=$(ls | grep "currentWriteIdx.txt")
+            currentWriteIdx=$(($numberOfFiles))
+            if [ "$currentWriteIdxFile" != "" ];
+            then
+                currentWriteIdx=$(cat currentWriteIdx.txt)
+            fi
+            echo -n $currentSelection > "$WORKING_DIR/copies/clip$currentWriteIdx.txt"
             fileFound=$(($numberOfFiles))
+            currentWriteIdx=$((($currentWriteIdx + 1) % $MAX_COPY_LIMIT))
+            echo -n $currentWriteIdx > "currentWriteIdx.txt"
         fi
-        echo $fileFound > "$WORKING_DIR/currentIdx.txt"
+        echo -n $fileFound > "$WORKING_DIR/currentIdx.txt"
     fi
     prevSelection=$currentSelection    
 done

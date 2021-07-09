@@ -2,7 +2,6 @@
 
 import gi
 import glob
-import os
 gi.require_version("Gtk", "3.0")
 from gi.repository import Gtk, Gdk
 import subprocess
@@ -16,7 +15,7 @@ def get_config():
     configDict = {row[0]: row[1][1:-2] for row in configList}
     return configDict
 
-def num_files():
+def get_file_data():
     print(CONFIG['WORKING_DIR'])
     numFiles = len(glob.glob('{0}/copies/clip*.txt'.format(CONFIG['WORKING_DIR'])))
     currentIdxFile = open('{0}/currentIdx.txt'.format(CONFIG['WORKING_DIR']), 'r')
@@ -95,7 +94,6 @@ class HeaderBarWindow(Gtk.Window):
             self.move_prev(widget)
         if ctrl and event.keyval == Gdk.KEY_Left:
             self.move_next(widget)
-
 
     def move_next(self, widget):
         if self.currentIdx < self.numFiles - 1:

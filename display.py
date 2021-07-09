@@ -1,3 +1,5 @@
+#!/usr/bin/python3
+
 import gi
 import glob
 import os

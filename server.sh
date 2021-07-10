@@ -3,21 +3,20 @@
 CONFIG_DIR="$HOME/.copy-cat-tail/config"
 . "$CONFIG_DIR/config"
 cd $WORKING_DIR
-prevSelection='5'
-currentSelection='5'
+prevSelection=""
+currentSelection=''
+echo "server listening to copies texts"
 while :
 do
     sleep 0.5
     currentSelection=$(xclip -o -selection clipboard)
-    if [ "$currentSelection" != "$prevSelection" ]
+    if [ "$currentSelection" != "$prevSelection" ];
     then
         files=$(find $WORKING_DIR/copies -maxdepth 1 -type f)
-        if [ "$files" != "" ];
-        then
-            echo -n $currentSelection > "$WORKING_DIR/currentCopy.txt"
-        fi
+        echo -n $currentSelection > "$WORKING_DIR/currentCopy.txt"
         fileFound=$((-1))
         numberOfFiles=0
+        echo $files
         for file in $files
         do
                 difference=$(diff -s currentCopy.txt copies/clip$numberOfFiles.txt | grep "\-\-\-")

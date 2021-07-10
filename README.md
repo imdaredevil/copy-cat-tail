@@ -17,12 +17,18 @@ chmod +x install
 ```
 
 ## Run manually
+
+The tool has two parts
+- A server to listen to copied items and store them.
+- A display window to show them and allow the user ( which is you :) ) to choose them.
+
+
+Although, the server will be added to startup applications and it will autostart on login, we can also start the server manually.
 In a new tab, run the following command
 ```bash
 copy-cat-tail-server
 ```
 
-This will start the server which can listen to copied items and store them.
 While the above process is running, in a separate tab, run the following
 
 ```bash
@@ -32,7 +38,7 @@ A popup showing the last copied item will be shown. We can switch between previo
 
 ## Post Installation steps
 
-We can add a keyboard shortcut ( with Ctrl since navigation buttons use Ctrl) for ``copy-cat-tail-show`` and add ``copy-cat-tail-server`` to startup-applications using gnome-session
+We can add a keyboard shortcut ( with Ctrl since navigation buttons use Ctrl) for ``copy-cat-tail-show`` for easy access
 
 
 

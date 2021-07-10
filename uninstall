@@ -1,4 +1,5 @@
 #!/bin/bash
 
 rm -rf $HOME/.copy-cat-tail
+rm -rf $HOME/.config/autostart/copy-cat-tail
 sudo rm -rf /usr/bin/copy-cat-tail-*

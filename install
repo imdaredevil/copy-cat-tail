@@ -24,5 +24,17 @@ sudo chmod +x /usr/bin/copy-cat-tail-show
 sudo cp server.sh /usr/bin/copy-cat-tail-server
 sudo chmod +x /usr/bin/copy-cat-tail-server
 
+# adding startup application
+mkdir -p $HOME/.config/autostart
+echo "[Desktop Entry]" > $HOME/.config/autostart/copy-cat-tail.desktop
+echo "Type=Application" >> $HOME/.config/autostart/copy-cat-tail.desktop
+echo "Exec=copy-cat-tail-server" >> $HOME/.config/autostart/copy-cat-tail.desktop 
+echo "Hidden=false NoDisplay=false" >> $HOME/.config/autostart/copy-cat-tail.desktop
+echo "X-GNOME-Autostart-enabled=true" >> $HOME/.config/autostart/copy-cat-tail.desktop
+echo "Name[en_IN]=copy-cat-tail" >> $HOME/.config/autostart/copy-cat-tail.desktop
+echo "Name=copy-cat-tail" >> $HOME/.config/autostart/copy-cat-tail.desktop
+echo "Comment[en_IN]=clipboard-server" >> $HOME/.config/autostart/copy-cat-tail.desktop
+echo "Comment=clipboard-server" >> $HOME/.config/autostart/copy-cat-tail.desktop
+
 
 

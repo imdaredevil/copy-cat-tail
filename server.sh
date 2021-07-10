@@ -1,6 +1,6 @@
 #!/bin/bash
 
-CONFIG_DIR="/home/imdaredevil/.copy-cat-tail/config"
+CONFIG_DIR="$HOME/.copy-cat-tail/config"
 . "$CONFIG_DIR/config"
 cd $WORKING_DIR
 prevSelection='5'

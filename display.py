@@ -5,8 +5,9 @@ import glob
 gi.require_version("Gtk", "3.0")
 from gi.repository import Gtk, Gdk
 import subprocess
+import os
 
-CONFIG_DIR = '/home/imdaredevil/.copy-cat-tail/config'
+CONFIG_DIR = '{0}/.copy-cat-tail/config'.format(os.environ.get('HOME'))
 CONFIG = {}
 
 def get_config():

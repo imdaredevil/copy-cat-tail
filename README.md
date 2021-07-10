@@ -21,8 +21,10 @@ In a new tab, run the following command
 ```bash
 copy-cat-tail-server
 ```
+
 This will start the server which can listen to copied items and store them.
 While the above process is running, in a separate tab, run the following
+
 ```bash
 copy-cat-tail-show
 ```

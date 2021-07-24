@@ -34,7 +34,7 @@ While the above process is running, in a separate tab, run the following
 ```bash
 copy-cat-tail-show
 ```
-A popup showing the last copied item will be shown. We can switch between previous ones by clicking the arrows above. or pressing Ctrl + Left/Right arrow keys. As soon as you release the Ctrl key, the popup will close. The text that you chose must be in the current clipboard and when you click paste / Ctrl + v (or Ctrl + Shift + V in terminal), the text would appear.
+A popup showing the last copied item will be shown. We can switch between previous ones by clicking the arrows above. or pressing Ctrl + Left/Right arrow keys. Once you set the desired clip text, click Ctrl+Down to close the popup. The text that you chose must be in the current clipboard and when you click paste / Ctrl + v (or Ctrl + Shift + V in terminal), the text would appear. ( You need not release Ctrl key until you paste. After doing it a few times, it would come in handy, I believe )
 
 ## Post Installation steps
 

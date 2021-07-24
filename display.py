@@ -72,7 +72,6 @@ class HeaderBarWindow(Gtk.Window):
         self.label.set_line_wrap(True)
         self.label.set_max_width_chars(150)
         scrolled_window.add(self.label)
-        self.connect("key-release-event",self.exit_window)
         self.connect("key-press-event", self.change_clip)
 
         # adding scroll window to window
@@ -82,11 +81,9 @@ class HeaderBarWindow(Gtk.Window):
         self.set_display_text()
 
     def exit_window(self, widget, event):
-        ctrl = (event.state & Gdk.ModifierType.CONTROL_MASK)
-        if ctrl and event.keyval == Gdk.KEY_Control_R:
-            self.destroy()
-            subprocess.run("echo -n \"{0}\" | xclip -i -selection clipboard".format(self.label.get_text()), shell=True)
-            Gtk.main_quit()
+        self.destroy()
+        subprocess.run("echo -n \"{0}\" | xclip -i -selection clipboard".format(self.label.get_text()), shell=True)
+        Gtk.main_quit()
     
     def change_clip(self, widget, event):
         ctrl = (event.state & Gdk.ModifierType.CONTROL_MASK)
@@ -94,15 +91,21 @@ class HeaderBarWindow(Gtk.Window):
             self.move_prev(widget)
         if ctrl and event.keyval == Gdk.KEY_Left:
             self.move_next(widget)
+        if ctrl and event.keyval == Gdk.KEY_Down:
+            self.exit_window(widget, event)
 
     def move_next(self, widget):
         if self.currentIdx < self.numFiles - 1:
                 self.currentIdx += 1
+        else:
+                self.currentIdx = 0
         self.set_display_text()
     
     def move_prev(self, widget):
         if self.currentIdx > 0:
                 self.currentIdx -= 1
+        else:
+                self.currentIdx = self.numFiles - 1        
         self.set_display_text()
     
     def set_display_text(self):

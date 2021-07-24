@@ -16,7 +16,6 @@ do
         echo -n $currentSelection > "$WORKING_DIR/currentCopy.txt"
         fileFound=$((-1))
         numberOfFiles=0
-        echo $files
         for file in $files
         do
                 difference=$(diff -s currentCopy.txt copies/clip$numberOfFiles.txt | grep "\-\-\-")

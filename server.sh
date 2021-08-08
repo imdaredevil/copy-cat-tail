@@ -13,15 +13,15 @@ do
     if [ "$currentSelection" != "$prevSelection" ];
     then
         files=$(find $WORKING_DIR/copies -maxdepth 1 -type f)
-        echo -n $currentSelection > "$WORKING_DIR/currentCopy.txt"
+        echo -n "$currentSelection" > "$WORKING_DIR/currentCopy.txt"
         fileFound=$((-1))
         numberOfFiles=0
         for file in $files
         do
-                difference=$(diff -s currentCopy.txt copies/clip$numberOfFiles.txt | grep "\-\-\-")
-                if [ "$difference" != "---" ];
+                difference=$(diff -s currentCopy.txt copies/clip$numberOfFiles.txt | grep "identical")
+                if [ "$difference" == "Files currentCopy.txt and copies/clip$numberOfFiles.txt are identical" ];
                 then
-                    fileFound=$(($numberOfFiles))
+                    fileFound=$(($numberOfFiles % $MAX_COPY_LIMIT))
                 fi
                 numberOfFiles=$(($numberOfFiles + 1))
         done

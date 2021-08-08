@@ -80,6 +80,10 @@ class HeaderBarWindow(Gtk.Window):
         # setting values
         self.set_display_text()
 
+    def get_current_text(self):
+        currText = self.label.get_text()
+        return currText.replace('"','\\"').replace('$','\\$')
+
     def exit_window(self, widget, event):
         self.destroy()
         subprocess.run("echo -n \"{0}\" | xclip -i -selection clipboard".format(self.label.get_text()), shell=True)

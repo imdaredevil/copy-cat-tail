@@ -13,7 +13,7 @@ do
     if [ "$currentSelection" != "$prevSelection" ];
     then
         files=$(find $WORKING_DIR/copies -maxdepth 1 -type f)
-        echo -n $currentSelection > "$WORKING_DIR/currentCopy.txt"
+        echo -n "$currentSelection" > "$WORKING_DIR/currentCopy.txt"
         fileFound=$((-1))
         numberOfFiles=0
         for file in $files

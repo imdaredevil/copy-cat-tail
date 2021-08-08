@@ -18,8 +18,8 @@ do
         numberOfFiles=0
         for file in $files
         do
-                difference=$(diff -s currentCopy.txt copies/clip$numberOfFiles.txt | grep "identical")
-                if [ "$difference" == "Files currentCopy.txt and copies/clip$numberOfFiles.txt are identical" ];
+                difference=$(diff -s currentCopy.txt copies/clip$numberOfFiles.txt | grep "\-\-\-")
+                if [ "$difference" != "---" ];
                 then
                     fileFound=$(($numberOfFiles))
                 fi
@@ -33,8 +33,8 @@ do
             then
                 currentWriteIdx=$(cat currentWriteIdx.txt)
             fi
-            echo -n $currentSelection > "$WORKING_DIR/copies/clip$currentWriteIdx.txt"
-            fileFound=$(($numberOfFiles))
+            echo -n "$currentSelection" > "$WORKING_DIR/copies/clip$currentWriteIdx.txt"
+            fileFound=$(($currentWriteIdx))
             currentWriteIdx=$((($currentWriteIdx + 1) % $MAX_COPY_LIMIT))
             echo -n $currentWriteIdx > "currentWriteIdx.txt"
         fi
